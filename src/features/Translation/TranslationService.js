@@ -1,9 +1,8 @@
-// src/features/Transcription/TranslationService.js
 import { OpenAI } from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.REACT_APP_OPENAI_API_KEY, // Use your environment variable here
-  dangerouslyAllowBrowser: true, // Enables browser use
+  apiKey: process.env.REACT_APP_OPENAI_API_KEY, 
+  dangerouslyAllowBrowser: true, 
 });
 
 export const translateText = async (text, targetLanguage) => {
