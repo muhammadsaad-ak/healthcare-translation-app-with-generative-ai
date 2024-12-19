@@ -3,13 +3,14 @@ import { IconButton, Typography, Box, MenuItem, Select, FormControl, InputLabel,
 import MicIcon from "@mui/icons-material/Mic";
 import { TranscriptionService } from "./TranscriptionService";
 import { translateText } from "../Translation/TranslationService"; // Translation service
+import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "../../utils/constants"; // Import constants
 
 const TranscriptionUI = () => {
   const [service] = useState(new TranscriptionService());
   const [isListening, setIsListening] = useState(false);
   const [originalTranscript, setOriginalTranscript] = useState("");
   const [translatedTranscript, setTranslatedTranscript] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("fr"); // Default translation language
+  const [selectedLanguage, setSelectedLanguage] = useState(DEFAULT_LANGUAGE); // Default translation language from constants
   const [loading, setLoading] = useState(false);
 
   // Handle language selection from the dropdown
@@ -26,11 +27,9 @@ const TranscriptionUI = () => {
       },
       (error) => {
         console.error("Error:", error);
-        setIsListening(false); // Stop listening if there is an error
+        setIsListening(false);
       }
     );
-
-    // Add the onend event listener to reset the state after speech recognition ends
     if (service.recognition) { // Assuming your service exposes a recognition instance
       service.recognition.onend = () => {
         setIsListening(false); // Stop listening when recognition ends
@@ -79,10 +78,11 @@ const TranscriptionUI = () => {
             label="Language"
             fullWidth
           >
-            <MenuItem value="fr">French</MenuItem>
-            <MenuItem value="es">Spanish</MenuItem>
-            <MenuItem value="de">German</MenuItem>
-            {/* Add more languages as needed */}
+            {SUPPORTED_LANGUAGES.map((language) => (
+              <MenuItem key={language.code} value={language.code}>
+                {language.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
